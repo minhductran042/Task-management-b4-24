@@ -14,8 +14,18 @@ module.exports.index = async (req,res) => {
     }
     //Het loc trang thai 
 
+    const sort = {};
 
-    const tasks = await Task.find(find);
+    const sortKey = req.query.sortKey;
+    const sortValue = req.query.sortValue;
+
+    if(sortKey && sortValue) {
+        sort[sortKey] = sortValue;
+    }
+
+    const tasks = await Task
+        .find(find)
+        .sort(sort);
 
     res.json(tasks);
 }
