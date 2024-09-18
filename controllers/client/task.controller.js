@@ -2,11 +2,20 @@ const Task = require("../../models/task.model.js");
 
 // [GET] /tasks
 module.exports.index = async (req,res) => {
-    const tasks = await Task.find({
-        deleted: false 
-    })
 
-    console.log(tasks);
+    const find = {
+        deleted: false
+    }
+
+    // Loc theo Trang thai
+    const status = req.query.status;
+    if(status) {
+        find.status = status;
+    }
+    //Het loc trang thai 
+
+
+    const tasks = await Task.find(find);
 
     res.json(tasks);
 }
@@ -20,7 +29,7 @@ module.exports.detail = async (req,res) => {
             deleted: false 
         });
 
-        res.json(tasks);
+        res.json(task);
 
     } catch(error) {
         res.json({
@@ -28,3 +37,5 @@ module.exports.detail = async (req,res) => {
         });
     }
 }
+
+
