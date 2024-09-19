@@ -14,6 +14,7 @@ module.exports.index = async (req,res) => {
     }
     //Het loc trang thai 
 
+    //Sap xep
     const sort = {};
 
     const sortKey = req.query.sortKey;
@@ -22,14 +23,42 @@ module.exports.index = async (req,res) => {
     if(sortKey && sortValue) {
         sort[sortKey] = sortValue;
     }
+    //Het sap xep 
+
+    //Phan trang
+    let limitItems = 2;
+    if(req.query.limitItems) {
+        limitItems = parseInt(req.query.limitItems);
+    }
+
+    let page = 1;
+    if(req.query.page) {
+        page = parseInt(req.query.page);
+    }
+
+    const skip = (page-1) * limitItems;
+
+    //Het phan trang
+
+    //Tim kiem
+    if(req.query.keyword) {
+        const regax = new RegExp(req.query.keyword,"i");
+        find.title = regax;
+    }
+
+    //Het tim kiem
+
 
     const tasks = await Task
         .find(find)
+        .limit(limitItems)
+        .skip(skip)
         .sort(sort);
 
     res.json(tasks);
 }
 
+// [GET] /tasks/detail/:id
 module.exports.detail = async (req,res) => {
     try {
         const id = req.params.id;
@@ -49,3 +78,25 @@ module.exports.detail = async (req,res) => {
 }
 
 
+// [PATCH] /tasks/change-status
+module.exports.changeStatus = async (req,res) => {
+    try {
+        const ids = req.body.id;
+        const status = req.body.status;
+        
+        await Task.updateMany({
+            _id: { $in: ids }
+        }, {
+            status: status 
+        })
+        
+        res.json({
+            message: "Cập nhật dữ liệu thành công"
+        });
+
+    } catch(error) {
+        res.json({
+            message: "Not Found"
+        });
+    }
+}
