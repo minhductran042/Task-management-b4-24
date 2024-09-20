@@ -142,3 +142,25 @@ module.exports.edit = async (req,res) => {
         });
     }
 }
+
+// [PATCH] /tasks/delete
+module.exports.delete = async (req,res) => {
+    try {
+        const ids = req.body.ids;
+        
+        await Task.updateMany({
+            _id: { $in: ids }
+        }, {
+            deleted: true
+        })
+        
+        res.json({
+            message: "Xóa công việc thành công"
+        });
+
+    } catch(error) {
+        res.json({
+            message: "Not Found"
+        });
+    }
+}
