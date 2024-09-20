@@ -13,7 +13,19 @@ const app = express();
 const port = process.env.PORT;
 
 app.use(bodyParser.json());
-app.use(cors());
+
+//CORS
+// Cach 1 : Tat ca cac ten mien deu duoc phep truy cap
+// app.use(cors()); 
+
+//Cach 2 : Ap dung cho 1 ten mien cu the
+// var corsOptions = {
+//     origin: 'http://abc.com',
+//     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+// }
+
+// app.use(cors(corsOptions));
+
 
 routesApi(app);
 
