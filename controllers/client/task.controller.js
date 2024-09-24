@@ -4,6 +4,10 @@ const Task = require("../../models/task.model.js");
 module.exports.index = async (req,res) => {
 
     const find = {
+        $or: [
+            { createdBy : req.user.id },
+            { listUser : req.user.id }
+        ],
         deleted: false
     }
 
@@ -109,7 +113,7 @@ module.exports.create = async (req,res) => {
         const id = req.user.id;
 
         req.body.createdBy = id;
-        
+
         const task = new Task(req.body);
         await task.save();
 
