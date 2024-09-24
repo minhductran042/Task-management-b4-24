@@ -107,7 +107,7 @@ module.exports.forgotPassword = async (req,res) => {
         expireAt: Date.now() + 3 * 60 * 1000
     }
     
-    console.log(forgotPasswordData);
+    // console.log(forgotPasswordData);
 
 
     const forgotPassword = new ForgotPassword(forgotPasswordData);
@@ -175,4 +175,31 @@ module.exports.reset = async (req,res) => {
         code: 200,
         message: "Đổi mật khẩu thành công",
     })
+}
+
+// [GET] /tasks/profile
+module.exports.profile = async (req,res) => {
+
+    try {
+        
+        const user = await User.findOne({
+            token: req.tokenVerify,
+            deleted: false
+        }).select("-password -token");
+
+        res.json({
+            code: 200,
+            message: "Thành công",
+            user: user 
+        })
+    } catch(error) {
+        res.json({
+            code: 400,
+            message: "Not found",
+        })
+    }
+    
+
+
+    
 }
